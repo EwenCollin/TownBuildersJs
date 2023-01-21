@@ -1,0 +1,30 @@
+{
+    "stone": {
+        "displayName": "Stone",
+        "blockstate": "stone"
+    },
+    "bricks": {
+        "displayName": "Bricks",
+        "blockstate": "bricks"
+    },
+    "glass": {
+        "displayName": "Glass",
+        "blockstate": "glass"
+    },
+    "oak_planks": {
+        "displayName": "Planks",
+        "blockstate": "oak_planks"
+    },
+    "quartz_block": {
+        "displayName": "Quartz",
+        "blockstate": "quartz_block"
+    },
+    "stone_bricks": {
+        "displayName": "Stone Brick",
+        "blockstate": "stone_bricks"
+    },
+    "copper_block": {
+        "displayName": "Copper",
+        "blockstate": "copper_block"
+    }
+}
