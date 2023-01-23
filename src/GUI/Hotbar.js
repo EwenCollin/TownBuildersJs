@@ -6,7 +6,7 @@ export default class Hotbar {
     static lineCount = 3;
     constructor() {
         this.hotbar = new BABYLON.GUI.Grid();   
-        this.hotbar.background = "red"; 
+        this.hotbar.background = "transparent"; 
         this.hotbar.width = 1;
         this.hotbar.height = "180px";
         this.hotbar.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;

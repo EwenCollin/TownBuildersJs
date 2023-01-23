@@ -7,7 +7,7 @@ export default class DebugMessage {
         this.container.background = "transparent";
         this.container.top = "20px";
         this.container.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-        this.container.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+        this.container.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
 
         this.titleRect = new BABYLON.GUI.Rectangle("dbMsgCreatingTitle");
         this.titleRect.width = 0.95;

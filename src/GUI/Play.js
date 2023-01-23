@@ -25,7 +25,8 @@ export default class Play {
         this.panel.width = "150px";
         this.panel.background = "transparent";
         this.panel.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-        this.panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+        this.panel.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        this.panel.top = "30px";
         BABYLON.Tools.Log("After stack attr");
         this.container.addControl(this.panel);
         BABYLON.Tools.Log("After stack panel");

@@ -19,8 +19,8 @@ export default class BuildPlaceCreating {
         this.titleRect.color = "white";
         this.titleRect.thickness = 2;
         this.titleRect.background = "#4444EE44";
-        this.titleRect.top = "40px";
-        this.titleRect.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        //this.titleRect.top = "40px";
+        this.titleRect.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
         
         this.titleText = new BABYLON.GUI.TextBlock();
         this.titleText.text = "Build Place position preview";
