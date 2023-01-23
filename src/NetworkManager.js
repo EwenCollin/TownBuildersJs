@@ -86,10 +86,17 @@ export default class NetworkManager {
     }
 
     getControlPlayer() {
+        BABYLON.Tools.Log("PLAYERS CONNECTED: " + JSON.stringify({"arr": this.rtcChannel}));
+        if (this.rtcChannelIndex == 0) return this.playerName;
+        return [this.playerName, ...this.rtcChannel].sort()[0];
+    }
+
+    /*
+    getControlPlayer() {
         if (this.rtcChannelIndex == 0) return this.playerName;
         BABYLON.Tools.Log("RTC DC before get control player");
         return this.rtcConnections[this.rtcChannelIndex - 1].getHand() ? this.rtcChannel[this.rtcChannelIndex - 1] : this.playerName;
-    }
+    }*/
     getControlPlayerAt(index) {
         BABYLON.Tools.Log("RTC DC get player at");
         if (index < 1) return this.playerName;

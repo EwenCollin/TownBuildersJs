@@ -10,7 +10,7 @@ export default class BuildPlace {
         this.assetManager = assetManager;
         this.chunks = [];
         //this.baseRootTransform = BABYLON.Matrix.Translation(Chunk.chunkSize/2, 0, Chunk.chunkSize/2).multiply(BABYLON.Matrix.Scaling(this.blockScale, this.blockScale, this.blockScale));
-        this.translationOffset = BABYLON.Matrix.Translation(0, -1.20, 0);//Chunk.chunkSize/2, -2.0, Chunk.chunkSize/2);
+        this.translationOffset = BABYLON.Matrix.Translation(-Chunk.chunkSize/2, -1.0, -Chunk.chunkSize/2);//Chunk.chunkSize/2, -2.0, Chunk.chunkSize/2);
         this.baseRootTransform = this.translationOffset.clone().multiply(BABYLON.Matrix.Scaling(BuildPlace.blockScale, BuildPlace.blockScale, BuildPlace.blockScale));
         //this.translationOffset.setTranslationFromFloats(-Chunk.chunkSize/4, -1.2, -Chunk.chunkSize/4);
         this.rootTransform = this.baseRootTransform.clone();
@@ -92,6 +92,22 @@ export default class BuildPlace {
         if (!chunk) return false;
         BABYLON.Tools.Log("BuildPlace before chunk set block");
         return chunk.setBlock(position, id, blockstate);
+    }
+
+    getBlock(position) {
+        BABYLON.Tools.Log("BuildPlace before get block " + position.x);
+        position.y = position.y < 0 ? 0 : position.y;
+        var chunk_x = Math.floor(position.x / Chunk.chunkSize);
+        var chunk_z = Math.floor(position.z / Chunk.chunkSize);
+        var chunk = this.getChunk(chunk_x, chunk_z);
+        BABYLON.Tools.Log("BuildPlace getBlock! x=" + chunk_x + ",z=" + chunk_z);
+        if (!chunk) return false;
+        BABYLON.Tools.Log("BuildPlace before chunk set block");
+        var localPosition = {
+            x: position.x % Chunk.chunkSize,
+            y: position.y % Chunk.chunkHeight,
+            z: position.z % Chunk.chunkSize };
+        return chunk.getBlock(position);
     }
 
     getChunk(pos_x, pos_z) {

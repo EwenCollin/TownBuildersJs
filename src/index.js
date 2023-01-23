@@ -20,7 +20,9 @@ BABYLON.Tools.LoadFile("app:///droidsans.ttf", (data) => {
 BABYLON.Tools.Log("Before create box");
 
 var initAll = function () {
-    BABYLON.Mesh.CreateBox("box1", 0.2, scene);
+    //BABYLON.Mesh.CreateBox("box1", 0.2, scene);
+    const gl = new BABYLON.GlowLayer("glow", scene);
+    gl.intensity = 0.5;
     BABYLON.Tools.Log("Loaded");
 
     // This creates and positions a free camera (non-mesh)

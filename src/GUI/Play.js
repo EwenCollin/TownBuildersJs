@@ -6,11 +6,20 @@ export default class Play {
     constructor() {
         this.container = new BABYLON.GUI.Container("playContainer");
         this.container.width = 1;
-        this.container.height = 0.8;
+        this.container.height = 0.9;
         this.container.background = "transparent";
-        this.container.top = "20px";
+        this.container.bottom = "20px";
         this.container.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
-        this.container.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
+        this.container.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
+
+        this.blockPoseContainer = new BABYLON.GUI.Container("blockPose");
+        this.blockPoseContainer.width = 0.7;
+        this.blockPoseContainer.height = 0.7;
+        this.blockPoseContainer.background = "transparent";
+        this.blockPoseContainer.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
+        this.blockPoseContainer.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_CENTER;
+        this.container.addControl(this.blockPoseContainer);
+
         BABYLON.Tools.Log("After container");
         this.panel = new BABYLON.GUI.StackPanel();
         this.panel.width = "150px";
@@ -26,6 +35,7 @@ export default class Play {
 
         this.hotbar = new Hotbar();
         this.container.addControl(this.hotbar.getControl());
+
         BABYLON.Tools.Log("After hotbar");
     }
 
@@ -35,6 +45,10 @@ export default class Play {
 
     getControl() {
         return this.container;
+    }
+
+    addOnBlockToggleListener(callback) {
+        this.blockPoseContainer.onPointerUpObservable.add(callback);
     }
 
     addOnHotbarSelectListener(callback) {

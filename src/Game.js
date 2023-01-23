@@ -118,6 +118,15 @@ export default class Game {
         this.gui.addOnBlockPlaceDistanceChangeListener(function(value) {
             this.blockPlaceRange = value;
         }.bind(this));
+        this.gui.addOnBlockToggleListener(function () {
+            BABYLON.Tools.Log("BuildPlace placing block toggle! ");
+            var block = this.buildPlace.getBlock(this.currentBuildPosition);
+            BABYLON.Tools.Log("BuildPlace placing block after: ");
+            if (block) {
+                BABYLON.Tools.Log("Block ok");
+                this.blockEvent.makeEvent(this.currentBuildPosition, block.getId() == "air" ? this.selectedBlock : "air", {});
+            }
+        }.bind(this));
         this.gui.addOnBlockPlaceListener(function() {
             BABYLON.Tools.Log("BuildPlace set bricks! " + this.currentBuildPosition.toString());
             this.blockEvent.makeEvent(this.currentBuildPosition, this.selectedBlock, {});

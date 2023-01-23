@@ -95,9 +95,9 @@ class RTCConnection {
     constructor(identifier, websocket, existingChannels) {
 
         RTC.setConfig("90.16.68.220"); //custom stun server set
-        
+
         this.existingChannels = existingChannels;
-        
+
         this.identifier = identifier;
         this.websocket = websocket;
 
@@ -158,6 +158,7 @@ class RTCConnection {
             if (this.websocketReady) {
                 var msgToSend = {
                     "client": this.identifier,
+                    "to": this.remoteChannelName,
                     "type": type,
                     "payload": {
                         "sdp": sdp,
@@ -176,6 +177,7 @@ class RTCConnection {
             if (this.websocketReady) {
                 var msgToSend = {
                     "client": this.identifier,
+                    "to": this.remoteChannelName,
                     "type": "candidate",
                     "payload": {
                         "candidate": candidate,
@@ -206,6 +208,17 @@ class RTCConnection {
 
         this.hasHand = false;
         this.dataChannelOpen = false;
+
+        this.remoteChannelName = null;
+    }
+
+    autoRegister() {
+        if(!this.dataChannelOpen) {
+            if (this.websocketReady) {
+                this.websocket.sendMessage(JSON.stringify({ "type": "register", "client": this.identifier, "payload": {} }));
+            }
+            setTimeout(this.autoRegister.bind(this), 500);
+        }
     }
 
     getHand() {
@@ -274,40 +287,54 @@ class RTCConnection {
         var clientName = msgData["client"];
         var msgType = msgData["type"];
         var msgPayload = msgData["payload"];
+        BABYLON.Tools.Log("WSMSG: " + JSON.stringify({
+            "dcOpen": this.dataChannelOpen,
+            "remDescs": this.remoteDescriptions,
+            "clientName": clientName
+        }));
         if (this.dataChannelOpen || (this.existingChannels.indexOf(clientName) != -1)) return;
+        BABYLON.Tools.Log("WSMSG accepted");
 
         if (clientName != this.identifier) {
             // We only pay attention to other client messages
-            if (msgType == "register") {
-                RTC.createDataChannel(clientName, clientName);
+            if (msgType == "register" && !this.remoteChannelName) {
                 this.hasHand = true;
+                this.remoteChannelName = clientName;
+                RTC.createDataChannel(clientName, clientName);
             }
-            if (msgType == "offer") {
+            if (msgType == "offer" && msgData["to"] == this.identifier) {
                 // We are offered to start a connection with peer "clientName".
+                this.remoteChannelName = clientName;
                 RTC.startPeerConnection(clientName);
             }
-            if (msgType == "offer" || msgType == "answer") {
+            if ((msgType == "offer" || msgType == "answer") && msgData["to"] == this.identifier) {
                 // We can set the description of remote peer "clientName".
                 BABYLON.Tools.Log("RTC PC remoteDesc set! " + msgType);
                 //RTC.setRemoteDescription(clientName, msgPayload["sdp"], msgType);
-                this.appendRemoteData(this.remoteDescriptions, clientName, { "sdp": msgPayload["sdp"], "type": msgType });
-                BABYLON.Tools.Log("RTC PC after set! " + msgType);
-                this.flushRemoteDescriptions(clientName);
-                BABYLON.Tools.Log("RTC PC after flush remDesc! " + msgType);
+                if (Object.keys(this.remoteDescriptions).indexOf(clientName) == -1) {
+                    this.appendRemoteData(this.remoteDescriptions, clientName, { "sdp": msgPayload["sdp"], "type": msgType });
+                    BABYLON.Tools.Log("RTC PC after set! " + msgType);
+                    this.flushRemoteDescriptions(clientName);
+                    BABYLON.Tools.Log("RTC PC after flush remDesc! " + msgType);
+                }
             }
-            if (msgType == "candidate") {
-                this.appendRemoteData(this.remoteCandidates, clientName, { "candidate": msgPayload["candidate"], "mid": msgPayload["mid"] });
-                this.flushRemoteCandidates(clientName);
-                BABYLON.Tools.Log("RTC PC after flush remCand! " + msgType);
+            if (msgType == "candidate" && msgData["to"] == this.identifier) {
+                if (Object.keys(this.remoteDescriptions).indexOf(clientName) != -1) {
+                    this.appendRemoteData(this.remoteCandidates, clientName, { "candidate": msgPayload["candidate"], "mid": msgPayload["mid"] });
+                    this.flushRemoteCandidates(clientName);
+                    BABYLON.Tools.Log("RTC PC after flush remCand! " + msgType);
+                }
             }
         }
     }
 
     addOnDataChannelOpenListener(callback) {
-        RTC.onDataChannel(function (dcData) {
+        RTC.onDataChannel(function (callback, dcData) {
             BABYLON.Tools.Log("RTC PC OPEN!");
-            this.callback(dcData["channelId"]);
-        }.bind({ callback: callback }));
+            if (this.remoteChannelName != null && this.remoteChannelName == dcData["channelId"]) {
+                callback(dcData["channelId"]);
+            }
+        }.bind(this, callback));
         //RTC.sendMessage(channelId, "Incredible! " + channelId + "? Do you copy? It's " + myName + ". Over!");
     };
 
@@ -316,13 +343,16 @@ class RTCConnection {
     }
 
     addOnMessageListener(callback) {
-        RTC.onMessage(function (dcData) {
+        RTC.onMessage(function (callback, dcData) {
             BABYLON.Tools.Log("RTC on msg listener here");
             BABYLON.Tools.Log("RTC on msg listener " + JSON.stringify(dcData));
             var channelId = dcData["channelId"];
             var msg = dcData["message"];
-            this.callback(channelId, msg);
-        }.bind({ callback: callback }));
+            
+            if (this.remoteChannelName != null && this.remoteChannelName == dcData["channelId"]) {
+                callback(channelId, msg);
+            }
+        }.bind(this, callback));
     }
 
 }

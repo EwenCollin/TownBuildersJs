@@ -12,7 +12,7 @@
         "blockstate": "glass"
     },
     "oak_planks": {
-        "displayName": "Planks",
+        "displayName": "Oak planks",
         "blockstate": "oak_planks"
     },
     "quartz_block": {
@@ -20,11 +20,67 @@
         "blockstate": "quartz_block"
     },
     "stone_bricks": {
-        "displayName": "Stone Brick",
+        "displayName": "Stone brick",
         "blockstate": "stone_bricks"
     },
     "copper_block": {
         "displayName": "Copper",
         "blockstate": "copper_block"
+    },
+    "smooth_stone": {
+        "displayName": "Smooth stone",
+        "blockstate": "smooth_stone"
+    },
+    "polished_andesite": {
+        "displayName": "Andesite",
+        "blockstate": "polished_andesite"
+    },
+    "cut_copper": {
+        "displayName": "Cut copper",
+        "blockstate": "cut_copper"
+    },
+    "white_carpet": {
+        "displayName": "White carpet",
+        "blockstate": "white_carpet"
+    },
+    "red_carpet": {
+        "displayName": "Red carpet",
+        "blockstate": "red_carpet"
+    },
+    "iron_block": {
+        "displayName": "Iron",
+        "blockstate": "iron_block"
+    },
+    "spruce_planks": {
+        "displayName": "Spruce planks",
+        "blockstate": "spruce_planks"
+    },
+    "dark_oak_planks": {
+        "displayName": "Dark oak planks",
+        "blockstate": "dark_oak_planks"
+    },
+    "gray_concrete": {
+        "displayName": "Gray concrete",
+        "blockstate": "gray_concrete"
+    },
+    "snow_block": {
+        "displayName": "Snow",
+        "blockstate": "snow_block"
+    },
+    "cut_sandstone": {
+        "displayName": "Sandstone",
+        "blockstate": "cut_sandstone"
+    },
+    "blue_wool": {
+        "displayName": "Blue wool",
+        "blockstate": "blue_wool"
+    },
+    "green_wool": {
+        "displayName": "Green wool",
+        "blockstate": "green_wool"
+    },
+    "acacia_planks": {
+        "displayName": "Acacia planks",
+        "blockstate": "acacia_planks"
     }
 }

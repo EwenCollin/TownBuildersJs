@@ -9,7 +9,7 @@ export default class EventManager {
         this.appliedEvents = [];
         this.localEventIndex = 0;
         BABYLON.Tools.Log("In ev manager 2");
-        this.networkManager.addGameEventListener(this.applyEvent.bind(this));
+        this.networkManager.addGameEventListener(this.addEvent.bind(this));
         BABYLON.Tools.Log("In ev manager 3");
         this.networkManager.addKeyframeListener(this.processKeyframe.bind(this));
         BABYLON.Tools.Log("In ev manager 4");
@@ -50,6 +50,8 @@ export default class EventManager {
         BABYLON.Tools.Log("Adding event");
         if (!("eventId" in eventData)) eventData["eventId"] = this.playerName + "_" + this.localEventIndex++;
         this.controlPlayer = this.networkManager.getControlPlayer();
+        this.controlPlayer = this.controlPlayer ? this.controlPlayer : this.playerName;
+        BABYLON.Tools.Log("Control Player: " + this.controlPlayer);
         if ((!("confirmed" in eventData)) || eventData["confirmed"] != this.controlPlayer) {
             eventData["confirmed"] = this.playerName;
             BABYLON.Tools.Log("Before send");

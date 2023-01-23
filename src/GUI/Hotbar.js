@@ -1,20 +1,24 @@
 import Item from "./Item";
+import Itemstates from "../itemstates.json";
 
 export default class Hotbar {
     static itemCount = 7;
+    static lineCount = 3;
     constructor() {
         this.hotbar = new BABYLON.GUI.Grid();   
         this.hotbar.background = "red"; 
         this.hotbar.width = 1;
-        this.hotbar.height = "60px";
+        this.hotbar.height = "180px";
         this.hotbar.horizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
         this.hotbar.verticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_BOTTOM;
         
         for (var i = 0; i < Hotbar.itemCount; i++) {
             this.hotbar.addColumnDefinition(1/Hotbar.itemCount);
         }
+        for (var i = 0; i < Hotbar.lineCount; i++) {
+            this.hotbar.addRowDefinition(1/Hotbar.lineCount);
+        }
         
-        this.hotbar.addRowDefinition(1);
         this.itemSelectCallbacks = [];
 
         this.items = [];
@@ -35,6 +39,22 @@ export default class Hotbar {
     }
 
     fillDefaultHotbar() {
+        //var itemIds = Itemstates.keys();
+        var i = 0;
+        for (var itId in Itemstates) {
+            if (i < Hotbar.itemCount*Hotbar.lineCount) {
+                BABYLON.Tools.Log("Before item 1 " + itId + " " + i);
+                var item = new Item(itId);
+                BABYLON.Tools.Log("Before item 2 " + i);
+                this.hotbar.addControl(item.getControl(), Math.floor(i/Hotbar.itemCount), i%Hotbar.itemCount);
+                BABYLON.Tools.Log("Before item 3 " + i);
+                item.addOnTouchListener(this.onTouch.bind(this));
+                BABYLON.Tools.Log("Before item 4 " + i);
+                this.items.push(item);
+            }
+            i++;
+        }
+        /*
         var stoneItem = new Item("stone");
         this.hotbar.addControl(stoneItem.getControl(), 0, 0);
         var bricksItem = new Item("bricks");
@@ -53,6 +73,7 @@ export default class Hotbar {
         for (var i in this.items) {
             this.items[i].addOnTouchListener(this.onTouch.bind(this));
         }
+        */
     }
 
     getControl() {

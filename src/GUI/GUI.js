@@ -40,6 +40,10 @@ export default class GUI {
         return this.buildPlaceCreating;
     }
 
+    addOnBlockToggleListener(callback) {
+        this.play.addOnBlockToggleListener(callback);
+    }
+
     addOnHotbarSelectListener(callback) {
         this.play.addOnHotbarSelectListener(callback);
     }
